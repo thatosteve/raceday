@@ -76,7 +76,7 @@ and confirms the `/docs` folder contains the ERD, endpoint plan, and SQL script.
 
 ## Video Walkthrough
 
-
+https://youtu.be/M9PPfzO_6BQ
 
 The video walks through the ERD decisions, the endpoint plan choices, and runs the
 SQL script live in SSMS.
