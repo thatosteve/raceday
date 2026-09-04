@@ -1,7 +1,7 @@
 name: Validate Part 1 Docs
 
 # Part 1 has no application code to build yet, so this workflow
-# validates that the required planning artefacts exist in /docs.
+# checks that the required planning documents exist in /docs.
 
 on:
   push:
@@ -28,14 +28,14 @@ jobs:
         run: |
           missing=0
 
-          # ERD (PNG or PDF) - the DBML source is also accepted
-          if ! ls docs/*.png docs/*.pdf docs/*.dbml >/dev/null 2>&1; then
-            echo "::error::No ERD file (.png/.pdf/.dbml) found in /docs"
+          # ERD - accept any image or diagram file whose name contains 'erd'
+          if ! ls docs/*.png docs/*.pdf docs/*.dbml docs/*.jpg 2>/dev/null | grep -qi erd; then
+            echo "::error::No ERD file (name should contain 'erd') found in /docs"
             missing=1
           fi
 
-          # API endpoint plan (Markdown or PDF)
-          if ! ls docs/*api*endpoint*plan*.md docs/*api*endpoint*plan*.pdf >/dev/null 2>&1; then
+          # API endpoint plan - accept markdown, pdf or word
+          if ! ls docs/*.md docs/*.pdf docs/*.docx 2>/dev/null | grep -qi endpoint; then
             echo "::error::API endpoint plan not found in /docs"
             missing=1
           fi
