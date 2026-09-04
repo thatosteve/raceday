@@ -71,7 +71,8 @@ The SQL script in `/docs` matches the ERD exactly.
 A GitHub Actions workflow (`.github/workflows/validate-docs.yml`) runs on every push
 and confirms the `/docs` folder contains the ERD, endpoint plan, and SQL script.
 
-![alt text](ci-green-build.png.png)
+<img width="1920" height="1008" alt="ci-green-build png" src="https://github.com/user-attachments/assets/cc52cf93-cefa-4f56-84ab-c89a400193ee" />
+
 
 ## Video Walkthrough
 
