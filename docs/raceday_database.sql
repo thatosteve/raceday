@@ -1,7 +1,4 @@
--- ============================================================
--- RaceDay Database  |  PROG6212 Programming 2B  |  Part 1 Section C
--- Run this top to bottom in SSMS. It matches the ERD in /docs.
--- ============================================================
+--RACEDAY
 
 CREATE DATABASE RaceDayDb;
 USE RaceDayDb;
@@ -13,7 +10,7 @@ USE RaceDayDb;
 -- Lookup table for the two roles
 CREATE TABLE ROLES (
     role_id   INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-    role_name VARCHAR(20) NOT NULL UNIQUE          -- 'Organiser' or 'Participant'
+    role_name VARCHAR(20) NOT NULL UNIQUE         
 );
 
 -- Every user (both Organisers and Participants)
@@ -23,10 +20,10 @@ CREATE TABLE USERS (
     first_name        VARCHAR(50) NOT NULL,
     last_name         VARCHAR(50) NOT NULL,
     email             VARCHAR(150) NOT NULL UNIQUE,
-    password_hash     VARCHAR(255) NOT NULL,       -- store the HASH, never the real password
+    password_hash     VARCHAR(255) NOT NULL,       
     phone_number      VARCHAR(20),
     date_of_birth     DATE,
-    profile_image_url VARCHAR(500),                -- filled in Part 3 (Azure Blob)
+    profile_image_url VARCHAR(500),               
     created_at        DATETIME NOT NULL DEFAULT GETDATE(),
     CONSTRAINT FK_USERS_ROLES FOREIGN KEY (role_id) REFERENCES ROLES(role_id)
 );
@@ -34,14 +31,14 @@ CREATE TABLE USERS (
 -- Events created by Organisers
 CREATE TABLE EVENTS (
     event_id         INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-    organiser_id     INT NOT NULL,                 -- points to a USER who is an Organiser
+    organiser_id     INT NOT NULL,                 
     name             VARCHAR(150) NOT NULL,
     description      VARCHAR(1000),
     event_date       DATETIME NOT NULL,
     location         VARCHAR(200) NOT NULL,
     distance_km      DECIMAL(6,2),
     event_type       VARCHAR(10) NOT NULL,
-    banner_image_url VARCHAR(500),                 -- filled in Part 3 (Azure Blob)
+    banner_image_url VARCHAR(500),                 
     created_at       DATETIME NOT NULL DEFAULT GETDATE(),
     CONSTRAINT FK_EVENTS_USERS FOREIGN KEY (organiser_id) REFERENCES USERS(user_id),
     CONSTRAINT CK_EVENTS_TYPE  CHECK (event_type IN ('run', 'walk', 'cycle'))
@@ -83,13 +80,11 @@ CREATE TABLE RESULTS (
     CONSTRAINT FK_RESULTS_ENROLMENTS FOREIGN KEY (enrolment_id) REFERENCES ENROLMENTS(enrolment_id)
 );
 
--- ============================================================
--- SAMPLE DATA
--- Note: the ID numbers below rely on the auto-numbering.
--- The first row added to a table gets ID 1, the next gets 2, etc.
--- ============================================================
 
--- ROLES  ->  role_id 1 = Organiser, role_id 2 = Participant
+-- SAMPLE DATA
+
+
+-- ROLES  
 INSERT INTO ROLES (role_name)
 VALUES ('Organiser'),
        ('Participant');
@@ -112,25 +107,25 @@ SELECT * FROM EVENTS;
 
 -- CATEGORIES  ->  numbered 1-7 in the order below
 INSERT INTO CATEGORIES (event_id, name, category_type)
-VALUES (1, '10km',     'Distance'),   -- category_id 1  (Soweto Spring Run)
-       (1, '21km',     'Distance'),   -- category_id 2  (Soweto Spring Run)
-       (1, 'Senior',   'Age'),        -- category_id 3  (Soweto Spring Run)
-       (2, '5km',      'Distance'),   -- category_id 4  (Charity Walk)
-       (2, 'Under 20', 'Age'),        -- category_id 5  (Charity Walk)
-       (3, '65km',     'Distance'),   -- category_id 6  (Cape Peninsula Cycle)
-       (3, 'Masters',  'Age');        -- category_id 7  (Cape Peninsula Cycle)
+VALUES (1, '10km',     'Distance'),   
+       (1, '21km',     'Distance'),   
+       (1, 'Senior',   'Age'),        
+       (2, '5km',      'Distance'),   
+       (2, 'Under 20', 'Age'),        
+       (3, '65km',     'Distance'),   
+       (3, 'Masters',  'Age');        
 SELECT * FROM CATEGORIES;
 
 -- ENROLMENTS  ->  (user_id, event_id, category_id)
 INSERT INTO ENROLMENTS (user_id, event_id, category_id, status)
-VALUES (3, 1, 2, 'Confirmed'),   -- enrolment 1: Sipho -> Soweto Spring Run (21km)
-       (3, 2, 4, 'Pending'),     -- enrolment 2: Sipho -> Charity Walk (5km)
-       (4, 1, 2, 'Confirmed'),   -- enrolment 3: Aisha -> Soweto Spring Run (21km)
-       (4, 3, 6, 'Confirmed');   -- enrolment 4: Aisha -> Cape Peninsula Cycle (65km)
+VALUES (3, 1, 2, 'Confirmed'),   
+       (3, 2, 4, 'Pending'),     
+       (4, 1, 2, 'Confirmed'),   
+       (4, 3, 6, 'Confirmed');   
 SELECT * FROM ENROLMENTS;
 
 -- RESULTS  ->  captured for two enrolments from the Soweto Spring Run
 INSERT INTO RESULTS (enrolment_id, finish_time, finish_position)
-VALUES (1, '01:52:34', 47),   -- Sipho's result
-       (3, '02:05:10', 88);   -- Aisha's result
+VALUES (1, '01:52:34', 47),   
+       (3, '02:05:10', 88);   
 SELECT * FROM RESULTS;
